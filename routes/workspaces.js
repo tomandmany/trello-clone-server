@@ -22,11 +22,30 @@ router.get('/participants', (req, res) => {
     if (ids) {
         const memberIds = ids.split(',');
         const filteredWorkspaces = workspaces.filter(workspace =>
-            workspace.participants.some(participant => memberIds.includes(participant.id))
+            Array.isArray(workspace.participants) && workspace.participants.some(participant => memberIds.includes(participant.id))
         );
+
         res.json(filteredWorkspaces);
     } else {
         res.status(404).send({ message: 'member not participate any workspaces' });
+    }
+});
+
+router.get('/boards', (req, res) => {
+    const { ids } = req.query;
+    if (ids) {
+        const boardIds = ids.split(',');
+        const workspace = workspaces.find(workspace =>
+            Array.isArray(workspace.boards) &&
+            workspace.boards.some(board => boardIds.includes(board.id))
+        );
+        if (workspace) {
+            res.json(workspace);
+        } else {
+            res.status(404).send({ message: 'board not participate any workspaces' });
+        }
+    } else {
+        res.status(404).send({ message: 'board not participate any workspaces' });
     }
 });
 
@@ -46,6 +65,7 @@ router.post('/', (req, res) => {
 
     if (workspaces) {
         newWorkspace.id = uuidv4(); // IDをUUIDで設定
+        newWorkspace.iconImgSrc = 'bg.jpg'; // IDをUUIDで設定
         workspaces.push(newWorkspace);
         res.status(201).json(newWorkspace);
     } else {

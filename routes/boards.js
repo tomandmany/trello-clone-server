@@ -22,7 +22,7 @@ router.get('/participants', (req, res) => {
     if (ids) {
         const memberIds = ids.split(',');
         const filteredBoards = boards.filter(board =>
-            board.participants.some(participant => memberIds.includes(participant.id))
+            Array.isArray(board.participants) && board.participants.some(participant => memberIds.includes(participant.id))
         );
         res.json(filteredBoards);
     } else {
@@ -46,6 +46,7 @@ router.post('/', (req, res) => {
 
     if (boards) {
         newBoard.id = uuidv4(); // IDをUUIDで設定
+        newBoard.bgImgSrc = 'bg.jpg';
         boards.push(newBoard);
         res.status(201).json(newBoard);
     } else {

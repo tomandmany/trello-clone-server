@@ -10,6 +10,10 @@ const boards = [
         'bgImgSrc': 'bg.jpg',
         'lists': [
             { 'id': lists[0].id },
+            // { 'id': lists[1].id },
+            // { 'id': lists[2].id },
+            // { 'id': lists[3].id },
+            // { 'id': lists[4].id },
         ],
         'participants': [
             { 'id': members[0].id },
